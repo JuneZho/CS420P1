@@ -1,9 +1,6 @@
 from game import Agent
 from game import Directions
 
-
-
-
 class DumbAgent(Agent):
     "An agent that goes West until it can't."
     def getAction(self, state):
@@ -15,10 +12,10 @@ class DumbAgent(Agent):
             return Directions.WEST
         else:
             print("Stopping.")
-            return Directions.STO
+            return Directions.STOP
 
 class RandomAgent(Agent):
-    "An agent that goes West until it can't."
+    "Based on the current options, pick a random action to carry out."
     def getAction(self, state):
          "The agent receives a GameState (defined in pacman.py)."
          print("Location:", state.getPacmanPosition())
@@ -28,7 +25,7 @@ class RandomAgent(Agent):
 
 
 class BetterRandomAgent(Agent):
-    "An agent that goes West until it can't."
+    "Based on the current options, pick a random action to carry out."
     def getAction(self, state):
          "The agent receives a GameState (defined in pacman.py)."
          print("Location:", state.getPacmanPosition())
@@ -40,32 +37,24 @@ class BetterRandomAgent(Agent):
 
 
 class ReflexAgent(Agent):
+    "If one of these actions would cause a food pellet to be eaten, it should choose that action. "
+    "If none of the immediate actions lead to food, it should choose randomly from the possibilities (excluding 'Stop')."
     def getAction(self, state):
-        foods = state.getFood().asList()
-        walls = state.getWalls()
-        position = state.getPacmanPosition()
-        print(walls.width)
-        print(position)
-        self.walk(foods[0],position[0],position[1],walls)
-        return Directions.STOP
 
-    def outofrange(self,x,y,walls):
-        return x<0 and x>=walls.width and y<0 and y>=walls.height and walls[x][y]
+        legalActions = state.getLegalPacmanActions()
+        if Directions.STOP in legalActions:
+            legalActions.remove(Directions.STOP)
 
-    def walk(self,food,x,y,walls):
-        if (x,y)==food:
-            print('get food')
-        if not self.outofrange(x,y,walls):
-            walls[x,y]=True
-            if not self.walk(x-1,y,walls):
-                walls[x, y] = False
-            elif not self.walk(x, y-1, walls):
-                walls[x, y] = False
-            elif not self.walk(x + 1, y, walls):
-                walls[x, y] = False
-            elif not self.walk(x, y+1, walls):
-                walls[x, y] = False
-            else:
-                return False
+        successors = [(state.generateSuccessor(0, action).data.score, action) for action in legalActions]
+        highestScore = max(successors)[0]
 
-        return True
+        bestActions = []
+        for score, action in successors:
+            if score == highestScore:
+                bestActions.append(action)
+                
+        import random
+        return random.choice(bestActions)
+
+               
+
