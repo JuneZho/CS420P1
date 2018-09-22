@@ -82,12 +82,67 @@ def depthFirstSearch(problem):
   print "Start's successors:", problem.getSuccessors(problem.getStartState())
   """
   "*** YOUR CODE HERE ***"
-  util.raiseNotDefined()
+
+  from game import Directions
+
+  "get initial state"
+  initialState = problem.getStartState()
+
+  exploredList = []
+  finalPath = []
+  frontier = util.Stack()
+
+  "node = cur_state, path, cost = 0 since we dont count now"
+  node = (initialState, [], 0)
+  frontier.push(node)
+
+  while not frontier.isEmpty():
+    curNode = frontier.pop()
+    "check whether it is goal state"
+    if problem.isGoalState(curNode[0]): return curNode[1]
+
+    if curNode[0] not in exploredList:
+      exploredList.append(curNode[0])
+      for successor in problem.getSuccessors(curNode[0]):
+        path = curNode[1]
+        path = path + [successor[1]]
+        finalPath = finalPath + [successor[1]]
+        frontier.push((successor[0], path, 0))
+
+  return finalPath    
+
 
 def breadthFirstSearch(problem):
   "Search the shallowest nodes in the search tree first. [p 74]"
   "*** YOUR CODE HERE ***"
-  util.raiseNotDefined()
+
+  from game import Directions
+
+  "get initial state"
+  initialState = problem.getStartState()
+
+  exploredList = []
+  finalPath = []
+  frontier = util.Queue()
+
+  "node = cur_state, path, cost = 0 since we dont count now"
+  node = (initialState, [], 0)
+  frontier.push(node)
+
+  while not frontier.isEmpty():
+    curNode = frontier.pop()
+    "check whether it is goal state"
+    if problem.isGoalState(curNode[0]): return curNode[1]
+
+    if curNode[0] not in exploredList:
+      exploredList.append(curNode[0])
+      for successor in problem.getSuccessors(curNode[0]):
+        path = curNode[1]
+        path = path + [successor[1]]
+        finalPath = finalPath + [successor[1]]
+        frontier.push((successor[0], path, 0))
+
+  return finalPath    
       
 def uniformCostSearch(problem):
   "Search the node of least total cost first. "
