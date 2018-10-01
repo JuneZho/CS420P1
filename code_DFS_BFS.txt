@@ -1,0 +1,76 @@
+def depthFirstSearch(problem):
+  """
+  Search the deepest nodes in the search tree first [p 74].
+  
+  Your search algorithm needs to return a list of actions that reaches
+  the goal.  Make sure to implement a graph search algorithm [Fig. 3.18].
+  
+  To get started, you might want to try some of these simple commands to
+  understand the search problem that is being passed in:
+  
+  print "Start:", problem.getStartState()
+  print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+  print "Start's successors:", problem.getSuccessors(problem.getStartState())
+  """
+  "*** YOUR CODE HERE ***"
+
+  from game import Directions
+
+  "get initial state"
+  initialState = problem.getStartState()
+
+  exploredList = []
+  finalPath = []
+  frontier = util.Stack()
+
+  "node = cur_state, path, cost = 0 since we dont count now"
+  node = (initialState, [], 0)
+  frontier.push(node)
+
+  while not frontier.isEmpty():
+    curNode = frontier.pop()
+    "check whether it is goal state"
+    if problem.isGoalState(curNode[0]): return curNode[1]
+
+    if curNode[0] not in exploredList:
+      exploredList.append(curNode[0])
+      for successor in problem.getSuccessors(curNode[0]):
+        path = curNode[1]
+        path = path + [successor[1]]
+        finalPath = finalPath + [successor[1]]
+        frontier.push((successor[0], path, 0))
+
+  return finalPath    
+
+
+def breadthFirstSearch(problem):
+  "Search the shallowest nodes in the search tree first. [p 74]"
+  "*** YOUR CODE HERE ***"
+
+  from game import Directions
+
+  "get initial state"
+  initialState = problem.getStartState()
+
+  exploredList = []
+  finalPath = []
+  frontier = util.Queue()
+
+  "node = cur_state, path, cost = 0 since we dont count now"
+  node = (initialState, [], 0)
+  frontier.push(node)
+
+  while not frontier.isEmpty():
+    curNode = frontier.pop()
+    "check whether it is goal state"
+    if problem.isGoalState(curNode[0]): return curNode[1]
+
+    if curNode[0] not in exploredList:
+      exploredList.append(curNode[0])
+      for successor in problem.getSuccessors(curNode[0]):
+        path = curNode[1]
+        path = path + [successor[1]]
+        finalPath = finalPath + [successor[1]]
+        frontier.push((successor[0], path, 0))
+
+  return finalPath
