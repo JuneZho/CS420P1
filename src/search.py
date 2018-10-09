@@ -156,14 +156,18 @@ def uniformCostSearch(problem):
 
     exploredList = []
     finalPath = []
+    "using the PriorityQueue to store the frontier"
     frontier = util.PriorityQueue()
 
-    "node = cur_state, path, cost = 0 since we dont count now"
+    "node = cur_state, path, cost = 0 for the initial state"
     node = (initialState, [], 0)
     frontier.push(node,0)
 
     while not frontier.isEmpty():
         NodeInfo = heapq.heappop(frontier.heap)
+        "get the node info from the frontier heap"
+        "I did not use the pop method in the PriorityQueue class because in my implementation I need the priority(cost) too"
+        "the pop method in the PriorityQueue only return the node without the cost"
         curNode = NodeInfo[1]
         cost = NodeInfo[0]
         "check whether it is goal state"
@@ -176,6 +180,8 @@ def uniformCostSearch(problem):
                 path = path + [successor[1]]
                 finalPath = finalPath + [successor[1]]
                 frontier.push((successor[0], path, cost+1),cost+1)
+                "update all the successor into the frontier with priority(cost) = current cost+1"
+                "since in the maze, all the step cost is 1"
 
 
     return finalPath
@@ -199,7 +205,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     finalPath = []
     frontier = util.PriorityQueue()
 
-    "node = cur_state, path, cost = 0 since we dont count now"
+    "node = cur_state, path, cost = 0"
     node = (initialState, [], 0)
     frontier.push(node,0)
 
@@ -216,6 +222,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 path = curNode[1]
                 path = path + [successor[1]]
                 finalPath = finalPath + [successor[1]]
+                "increment the cost by 1 and calc the priority, which is the cost + cost to the goal(by heuristic func)"
                 frontier.push((successor[0], path, curNode[2]+1),curNode[2]+1+nullHeuristic(curNode[0],problem))
 
 
