@@ -1,0 +1,72 @@
+import heapq
+def uniformCostSearch(problem):
+
+
+    initialState = problem.getStartState()
+
+    exploredList = []
+    finalPath = []
+    frontier = util.PriorityQueue()
+
+    "node = cur_state, path, cost = 0 since we dont count now"
+    node = (initialState, [], 0)
+    frontier.push(node,0)
+
+    while not frontier.isEmpty():
+        NodeInfo = heapq.heappop(frontier.heap)
+        curNode = NodeInfo[1]
+        cost = NodeInfo[0]
+        "check whether it is goal state"
+        if problem.isGoalState(curNode[0]): return curNode[1]
+
+        if curNode[0] not in exploredList:
+            exploredList.append(curNode[0])
+            for successor in problem.getSuccessors(curNode[0]):
+                path = curNode[1]
+                path = path + [successor[1]]
+                finalPath = finalPath + [successor[1]]
+                frontier.push((successor[0], path, cost+1),cost+1)
+
+
+    return finalPath
+
+
+
+def nullHeuristic(state, problem=None):
+    """
+    A heuristic function estimates the cost from the current state to the nearest
+    goal in the provided SearchProblem.  This heuristic is trivial.
+    """
+
+    return util.manhattanDistance(state,problem.goal)
+
+
+def aStarSearch(problem, heuristic=nullHeuristic):
+    "Search the node that has the lowest combined cost and heuristic first."
+    initialState = problem.getStartState()
+
+    exploredList = []
+    finalPath = []
+    frontier = util.PriorityQueue()
+
+    "node = cur_state, path, cost = 0 since we dont count now"
+    node = (initialState, [], 0)
+    frontier.push(node,0)
+
+    while not frontier.isEmpty():
+        NodeInfo = heapq.heappop(frontier.heap)
+        curNode = NodeInfo[1]
+        priority = NodeInfo[0]
+        "check whether it is goal state"
+        if problem.isGoalState(curNode[0]): return curNode[1]
+
+        if curNode[0] not in exploredList:
+            exploredList.append(curNode[0])
+            for successor in problem.getSuccessors(curNode[0]):
+                path = curNode[1]
+                path = path + [successor[1]]
+                finalPath = finalPath + [successor[1]]
+                frontier.push((successor[0], path, curNode[2]+1),curNode[2]+1+nullHeuristic(curNode[0],problem))
+
+
+    return finalPath
