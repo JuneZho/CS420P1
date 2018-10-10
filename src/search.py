@@ -148,7 +148,7 @@ def breadthFirstSearch(problem):
 
     return finalPath
 
-import heapq
+
 def uniformCostSearch(problem):
 
 
