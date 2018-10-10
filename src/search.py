@@ -164,12 +164,8 @@ def uniformCostSearch(problem):
     frontier.push(node,0)
 
     while not frontier.isEmpty():
-        NodeInfo = heapq.heappop(frontier.heap)
-        "get the node info from the frontier heap"
-        "I did not use the pop method in the PriorityQueue class because in my implementation I need the priority(cost) too"
-        "the pop method in the PriorityQueue only return the node without the cost"
-        curNode = NodeInfo[1]
-        cost = NodeInfo[0]
+
+        curNode = frontier.pop()
         "check whether it is goal state"
         if problem.isGoalState(curNode[0]): return curNode[1]
 
@@ -179,7 +175,7 @@ def uniformCostSearch(problem):
                 path = curNode[1]
                 path = path + [successor[1]]
                 finalPath = finalPath + [successor[1]]
-                frontier.push((successor[0], path, cost+1),cost+1)
+                frontier.push((successor[0], path, curNode[2]+1),curNode[2]+1)
                 "update all the successor into the frontier with priority(cost) = current cost+1"
                 "since in the maze, all the step cost is 1"
 
@@ -210,9 +206,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     frontier.push(node,0)
 
     while not frontier.isEmpty():
-        NodeInfo = heapq.heappop(frontier.heap)
-        curNode = NodeInfo[1]
-        priority = NodeInfo[0]
+        curNode = frontier.pop()
         "check whether it is goal state"
         if problem.isGoalState(curNode[0]): return curNode[1]
 
